@@ -18,8 +18,8 @@ A bot for playing a clone of Wordle.
 - `codes-for-getting-emojs.txt` has been added for easily getting the emoji codes from your server(s)
 - The dict-popular word list has had 13 U.S. American spellings with -or purged from the popular word list
 - The dict-popular word list has had 1 U.S. American spelling "fiber" purged from the popular word list
-- The dict-popular word list has had 2 coloquiol U.S. American words "gator" and "senor" purged from the popular word list
-- The dict-sowpods word list has had the coloquiol Australian word "texta" added to it
+- The dict-popular word list has had 2 colloquial U.S. American words "gator" and "senor" purged from the popular word list
+- The dict-sowpods word list has had the colloquial Australian word "texta" added to it
 
 ## Setup
 
