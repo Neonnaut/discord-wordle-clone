@@ -5,6 +5,6 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
-CHECK = ':white_check_mark'
-ERR = 'x'
+CHECK = ':white_check_mark:'
+ERR = ':x:'
 WARN = ':warning:'

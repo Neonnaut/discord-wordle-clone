@@ -5,7 +5,7 @@ from typing import List, Optional
 
 import discord
 
-from bot import ERR, WARN
+from __init__ import ERR, WARN
 
 
 popular_words = open("utils/dict-popular.txt").read().splitlines()

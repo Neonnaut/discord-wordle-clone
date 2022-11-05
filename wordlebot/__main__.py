@@ -5,7 +5,7 @@ from discord import Intents
 from discord.ext import commands
 from discord.utils import _ColourFormatter
 
-from wordlebot import TOKEN, ERR
+from __init__ import TOKEN, ERR
 
 os.chdir(os.path.dirname(os.path.realpath(__file__))) # Directoy that __main__.py is in is now root directory if it wasn't
 
