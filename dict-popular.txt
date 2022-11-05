@@ -51,7 +51,6 @@ racks
 refer
 birch
 trash
-rumor
 irons
 puffy
 admit
@@ -227,7 +226,6 @@ firms
 shoal
 binge
 seals
-manor
 hauls
 clash
 yummy
@@ -512,7 +510,6 @@ going
 organ
 cutie
 shear
-rigor
 field
 giver
 goofy
@@ -524,7 +521,6 @@ grill
 lucky
 timer
 grope
-savor
 fried
 brave
 kissy
@@ -679,7 +675,6 @@ chaff
 lives
 jeans
 trade
-arbor
 tweak
 feign
 mocks
@@ -701,12 +696,10 @@ topaz
 scary
 doggy
 swing
-armor
 quell
 rages
 zeros
 smash
-honor
 noses
 vivid
 sorts
@@ -751,7 +744,6 @@ petal
 nexus
 coupe
 range
-humor
 adapt
 freed
 lines
@@ -898,7 +890,6 @@ smack
 motel
 patio
 smell
-color
 miggs
 teams
 seams
@@ -1248,7 +1239,6 @@ abode
 lotte
 talky
 grove
-fiber
 fiery
 print
 swabs
@@ -1306,7 +1296,6 @@ buyer
 aloha
 twins
 ropes
-senor
 bones
 table
 walla
@@ -1665,7 +1654,6 @@ suing
 tulip
 opium
 urban
-valor
 cheep
 drums
 satyr
@@ -1697,7 +1685,6 @@ jimmy
 daffy
 cigar
 shrub
-vigor
 pecks
 bonus
 argue
@@ -2151,7 +2138,6 @@ items
 giddy
 voted
 shops
-favor
 welts
 stark
 cable
@@ -2383,7 +2369,6 @@ bills
 story
 tardy
 codes
-labor
 shred
 toots
 soups
@@ -2854,7 +2839,6 @@ clout
 aspen
 shots
 tries
-gator
 taint
 barbs
 earns

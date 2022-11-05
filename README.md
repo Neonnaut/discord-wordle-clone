@@ -1,41 +1,39 @@
 # Discord Wordle Clone
 
-[![Discord](https://img.shields.io/discord/819650821314052106?color=7289DA&logo=discord&logoColor=white)](https://discord.gg/fPrdqh3Zfu "Dev Pro Tips Discussion & Support Server")
-[![Powered by Nextcord](https://custom-icon-badges.herokuapp.com/badge/-Powered%20by%20Nextcord-0d1620?logo=nextcord)](https://github.com/nextcord/nextcord "Powered by Nextcord Python API Wrapper")
-
 A bot for playing a clone of Wordle.
 
-**Note:** This project is inspired by the popular word game called "Wordle" but is not affiliated.
+**Note 1:** This project is inspired by the popular word game called "Wordle" but is not affiliated.
 
-[**Add the bot**](https://discord.com/api/oauth2/authorize?client_id=938502854921027584&permissions=11264&scope=bot%20applications.commands)
+**Note 2:** This is a fork of https://github.com/DenverCoder1/discord-wordle-clone.
 
-![image](https://user-images.githubusercontent.com/20955511/152254532-632c0f3e-0363-4bb1-bcba-8ecc379675b9.png)
+## Changes in this fork
 
-Once the bot is added, you can play wordle by using the command `/play`
+- This fork has been migrated to discord.py version 2.0.0.
+- The Wordle commands have been migrated to a cog
+- The Wordle commands have been migrated to hybrid commands
+- Jonah Lawrence's help cog has been added as a cog, with some small formatting changes
+- The embeds have been reworded in some small ways
+- The emoji images have been directly added to this fork
+- The yellow letters have been changed to a darker shade of yellow (easier on my eyes)
+- `codes-for-getting-emojs.txt` has been added for easily getting the emoji codes from your server(s)
+- The dict-popular word list has had 13 U.S. American spellings with -or purged from the popular word list
+- The dict-popular word list has had 1 U.S. American spelling "fiber" purged from the popular word list
+- The dict-popular word list has had 2 coloquiol U.S. American words "gator" and "senor" purged from the popular word list
+- The dict-sowpods word list has had the coloquiol Australian word "texta" added to it
 
-## Demo
+## Setup
 
-![wordle demo](https://i.imgur.com/t8XgQL4.gif)
-
-## Tutorial
-
-Video tutorial on how this bot was made
-
-https://www.youtube.com/watch?v=0p_eQGKFY3I
-
-## Environment Variables
-
-The following environment variables can be specified in a `.env` file to configure the bot for self-hosting:
-
-- `TOKEN`: The token for the bot.
-- `GUILD_IDS` (optional): A comma-separated list of guild IDs to activate slash commands in. (This is for testing since global slash commands can take a while to register.)
-
-## Custom Emoji
-
-The letter emoji set used by the bot can be downloaded from [here](https://drive.google.com/drive/folders/1beZ_WmFJGVCVYEhmid_kOMkIhjyNnC6_?usp=sharing).
-
-These emoji are an adaptation of [Twemoji](https://github.com/twitter/twemoji), published under the [CC-BY 4.0 License](https://creativecommons.org/licenses/by/4.0/).
-
-## Add the bot
-
-Click [**here**](https://discord.com/api/oauth2/authorize?client_id=938502854921027584&permissions=11264&scope=bot%20applications.commands) to add the bot with the basic permissions.
+- In the [Discord developer portal](https://discord.com/developers/applications) create a new application and give it a name. Under `Bot` select "add bot"
+- Under `Bot`, turn on PRESENCE INTENT, SERVER MEMBERS INTENT and MESSAGE CONTENT INTENT
+- Generate an invite link for your bot under `QAuth2 > URL Generator`, with "bot" > "manage roles", "read messages/view channels", "send messages", "use external emojis" and "add reactions" permissions
+- Use the invite link in your browser to invite your bot to any servers you want the bot in
+- Download the `bot` folder to your environment, the one with the `__main__.py` file, `.env` file and `cogs` folder
+- Install python 3.10+. Make sure you have set Python to the system path to use pip
+- Install dependencies with `pip install discord==2.0.0, python-dotenv==0.20.0`
+- You can change the bot prefix in the `__main__.py` file
+- Back in the developer portal, under `Bot`, copy your bot's secret token. create a new `.env` file in the `bot` folder. Make sure the file is called ".env" and _not_ ".env.txt"
+- Specify a variable called `TOKEN=your_token_here` with your bot's secret token replacing "your_token_here"
+- Run it as a module with `python wordlebot`, or `sudo nohup python3 wordlebot` or whatever command you use to run python scripts in your environment; or directly run the `__main__.py` file. Congratulations, you are now self-hosting a discord bot
+- You can play wordle by using the command `/wordle`
+- You might need to turn on all intents in the developer portal, or change the bots intents in the `__main__.py` file
+- If you do not want to self-host, I suggest using Heroku or [Fly.io](https://fly.io/docs/getting-started/)
