@@ -174,7 +174,7 @@ def update_embed(embed: discord.Embed, guess: str) -> discord.Embed:
     Returns:
         discord.Embed: The updated embed
     """
-    puzzle_id = embed.title.text.split()[1]
+    puzzle_id = embed.title.split()[1]
     puzzle_id = int(puzzle_id.replace('#', ''))
     answer = popular_words[puzzle_id]
     colored_word = generate_colored_word(guess, answer)
