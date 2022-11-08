@@ -34,11 +34,7 @@ class HelpView(discord.ui.View):
 
 class MyHelpCommand(commands.MinimalHelpCommand):
     def get_command_signature(self, command):
-        if command.signature != "":
-            signature = " " + command.signature
-        else:
-            signature = ""
-        return f"{self.context.clean_prefix}{command.qualified_name}{signature}"
+        return f"{self.context.clean_prefix}{command.qualified_name} {command.signature}"
 
     def __init__(self):
         attrs = {
@@ -55,7 +51,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
                 continue
             emoji = getattr(cog, "COG_EMOJI", None)
             options.append(discord.SelectOption(
-                label=cog.qualified_name if cog else "No Category",
+                label=cog.qualified_name.capitalize() if cog else "No Category",
                 emoji=emoji,
                 description=cog.description[:100] if cog and cog.description else None
             ))
@@ -77,10 +73,9 @@ class MyHelpCommand(commands.MinimalHelpCommand):
             # show help about all commands in the set
             filtered = await self.filter_commands(command_set, sort=True)
             for command in filtered:
-                helpDoc = command.help or ""
                 embed.add_field(
-                    name=command.qualified_name,
-                    value=f"`{self.get_command_signature(command)}`\n{helpDoc}",
+                    name=self.get_command_signature(command),
+                    value=command.help or "...",
                     inline=False
                 )
         elif mapping:
@@ -89,7 +84,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
                 filtered = await self.filter_commands(command_set, sort=True)
                 if not filtered:
                     continue
-                name = cog.qualified_name if cog else "No category"
+                name = cog.qualified_name.capitalize() if cog else "No category"
                 emoji = getattr(cog, "COG_EMOJI", None)
                 cog_label = f"{emoji} {name}" if emoji else name
                 # \u2002 is an en-space
@@ -124,7 +119,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
         embed = await self._help_embed(
             title=f"{emoji} {command.qualified_name}" if emoji else command.qualified_name,
             description="`" +
-            self.get_command_signature(command)+"`\n" + command.help,
+            self.get_command_signature(command)+"`\n\n" + command.help,
             command_set=command.commands if isinstance(
                 command, commands.Group) else None
         )
@@ -138,7 +133,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
             )
         emoji = getattr(cog, "COG_EMOJI", None)
         return await self._help_embed(
-            title=f"{emoji} {cog.qualified_name}" if emoji else cog.qualified_name,
+            title=f"{emoji} {cog.qualified_name.capitalize()}" if emoji else cog.qualified_name.capitalize(),
             description=cog.description,
             command_set=cog.get_commands()
         )
@@ -157,13 +152,11 @@ class Help(commands.Cog, name="Help"):
 
     def __init__(self, bot):
         self.bot = bot
-        # This replaces the original help command with the custom command
         self._original_help_command = bot.help_command
         bot.help_command = MyHelpCommand()
         bot.help_command.cog = self
 
     def cog_unload(self):
-        # This sets the custom help command to the original help command on cog unload
         self.bot.help_command = self._original_help_command
 
 

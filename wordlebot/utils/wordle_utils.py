@@ -306,6 +306,9 @@ async def process_message_as_guess(bot: discord.Client, message: discord.Message
     # if the parent message is not the bot's message, ignore it
     if parent.author.id != bot.user.id:
         return False
+    # if the parent message is from a bot, ignore it
+    elif parent.author.bot:
+        return False
 
     # check that the message has embeds
     if not parent.embeds:

@@ -14,12 +14,11 @@ A bot for playing a clone of Wordle.
 - Jonah Lawrence's help cog has been added as a cog, with some small formatting changes
 - The embeds have been reworded in some small ways
 - The emoji images have been directly added to this fork
-- The yellow letters have been changed to a darker shade of yellow (easier on my eyes)
+- The yellow letters have been changed to a darker shade of yellow (easier to read)
 - `codes-for-getting-emojs.txt` has been added for easily getting the emoji codes from your server(s)
-- The dict-popular word list has had 13 U.S. American spellings with -or purged from the popular word list
-- The dict-popular word list has had 1 U.S. American spelling "fiber" purged from the popular word list
-- The dict-popular word list has had 2 colloquial U.S. American words "gator" and "senor" purged from the popular word list
-- The dict-sowpods word list has had the colloquial Australian word "texta" added to it
+- The dict-popular word list has had 13 U.S. American spellings with "-or" removed from the popular word list
+- The dict-popular word list has had 1 U.S. American spelling "fiber" removed from the popular word list
+- The dict-popular word list has had 1 colloquial U.S. American word "senor" removed from the popular word list
 
 ## Setup
 
@@ -33,6 +32,8 @@ A bot for playing a clone of Wordle.
 - You can change the bot prefix in the `__main__.py` file
 - Back in the developer portal, under `Bot`, copy your bot's secret token. create a new `.env` file in the `bot` folder. Make sure the file is called ".env" and _not_ ".env.txt"
 - Specify a variable called `TOKEN=your_token_here` with your bot's secret token replacing "your_token_here"
+- Uload the emojis in the emoji folder to your server(s)
+- Get your emoji codes by pasting `codes-for-getting-emojis.txt` in a channel on your server(s) and replacing the emoji codes in `wordle_utils.py` with the new emoji codes
 - Run it as a module with `python wordlebot`, or `sudo nohup python3 wordlebot` or whatever command you use to run python scripts in your environment; or directly run the `__main__.py` file. Congratulations, you are now self-hosting a discord bot
 - You can play wordle by using the command `/wordle`
 - You might need to turn on all intents in the developer portal, or change the bots intents in the `__main__.py` file
