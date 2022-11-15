@@ -2,11 +2,9 @@ import datetime
 import random
 import re
 from typing import List, Optional
-
-import discord
-
 from __init__ import ERR, WARN
 
+import discord
 
 popular_words = open("utils/dict-popular.txt").read().splitlines()
 all_words = set(word.strip() for word in open("utils/dict-sowpods.txt"))
@@ -153,8 +151,11 @@ def generate_puzzle_embed(user: discord.User, puzzle_id: int) -> discord.Embed:
     Returns:
         discord.Embed: The embed to be sent
     """
-    embed = discord.Embed(title=f"Wordle #{puzzle_id}")
-    embed.description = "\n".join([generate_blanks()] * 6)
+    embed = discord.Embed(
+        title=f"Discord Wordle #{puzzle_id}",
+        color=0X45c33a,
+        description = "\n".join([generate_blanks()] * 6)
+    )
     embed.set_author(name=user.name, icon_url=user.display_avatar.url)
     embed.set_footer(
         text="To guess, reply to this message with a word"
@@ -174,7 +175,7 @@ def update_embed(embed: discord.Embed, guess: str) -> discord.Embed:
     Returns:
         discord.Embed: The updated embed
     """
-    puzzle_id = embed.title.split()[1]
+    puzzle_id = embed.title.split()[-1]
     puzzle_id = int(puzzle_id.replace('#', ''))
     answer = popular_words[puzzle_id]
     colored_word = generate_colored_word(guess, answer)
@@ -196,8 +197,10 @@ def update_embed(embed: discord.Embed, guess: str) -> discord.Embed:
             embed.description += "\n\nMagnificent!"
         if num_empty_slots == 5:
             embed.description += "\n\nGenius!"
+        embed.set_footer(text='')
     elif num_empty_slots == 0:
         embed.description += f"\n\nThe answer was {answer}!"
+        embed.set_footer(text='')
     return embed
 
 
@@ -250,7 +253,7 @@ def is_game_over(embed: discord.Embed) -> bool:
     return "\n\n" in embed.description
 
 
-def generate_info_embed() -> discord.Embed:
+def generate_info_embed(prefix) -> discord.Embed:
     """
     Generates an embed with information about the bot
 
@@ -263,7 +266,8 @@ def generate_info_embed() -> discord.Embed:
         title="Guess the Wordle in 6 tries",
         description=
             "Each guess must be a valid 5-letter word.\n"
-            "The colours of the tiles change to show how close the guess is to the word.\n"
+            "The colours of the tiles change to show how close the guess is to the word.\n",
+        color=0X45c33a
     )
     
     embed.add_field(
@@ -279,9 +283,9 @@ def generate_info_embed() -> discord.Embed:
         inline=False,
         name=f"**You can start a game with**",
         value=
-            ":sunny: `/wordle daily` - Play the puzzle of the day\n"
-            ":game_die: `/wordle random` - Play a random puzzle\n"
-            ":key: `/wordle <puzzle_id>` - Play a puzzle by it's ID\n\n"
+            f":sunny: `{prefix}wordle daily` - Play the puzzle of the day\n"
+            f":game_die: `{prefix}wordle random` - Play a random puzzle\n"
+            f":key: `{prefix}wordle <puzzle_id>` - Play a puzzle by it's ID\n\n"
     )
     return embed
 
@@ -306,8 +310,9 @@ async def process_message_as_guess(bot: discord.Client, message: discord.Message
     # if the parent message is not the bot's message, ignore it
     if parent.author.id != bot.user.id:
         return False
-    # if the parent message is from a bot, ignore it
-    elif parent.author.bot:
+
+    # if the parent message is not from a bot, ignore it
+    if message.author.bot:
         return False
 
     # check that the message has embeds
@@ -335,11 +340,7 @@ async def process_message_as_guess(bot: discord.Client, message: discord.Message
 
     # check that the game is not over
     if is_game_over(embed):
-        await message.reply(f"{ERR} The game is already over. Start a new game with /play", delete_after=5)
-        try:
-            await message.delete(delay=5)
-        except Exception:
-            pass
+        await message.reply(f"{ERR} The game is already over. Start a new game with /wordle", delete_after=5)
         return True
 
     # strip mentions from the guess
@@ -347,13 +348,13 @@ async def process_message_as_guess(bot: discord.Client, message: discord.Message
 
     if len(guess) == 0:
         await message.reply(
-            f"{WARN} I am unable to see what you are trying to guess.\n"
+            "{WARN} I am unable to see what you are trying to guess.\n"
             "Please try mentioning me in your reply before the word you want to guess.\n\n"
             f"**For example:**\n{bot.user.mention} crate\n\n",
-            delete_after=14,
+            delete_after=10,
         )
         try:
-            await message.delete(delay=14)
+            await message.delete(delay=10)
         except Exception:
             pass
         return True

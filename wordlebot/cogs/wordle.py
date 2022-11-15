@@ -53,7 +53,6 @@ class Wordle(commands.GroupCog, name="Wordle"):
         ctx: commands.Context,
     ):
         """How to play Discord Wordle"""
-
         await ctx.reply(embed=generate_info_embed(), mention_author=False)
 
     @commands.Cog.listener()
@@ -61,9 +60,7 @@ class Wordle(commands.GroupCog, name="Wordle"):
         self,
         message: Message
     ):
-        """
-        When a message is sent, process it as a guess.
-        """
+        """When a message is sent, process it as a guess."""
         await process_message_as_guess(self.bot, message)
 
 async def setup(bot: commands.bot):
