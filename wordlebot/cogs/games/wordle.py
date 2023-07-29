@@ -2,12 +2,15 @@ import datetime
 import random
 import re
 from typing import List, Optional
-from __init__ import ERR, WARN
+
+from constants import ERR, WARN
 
 import discord
+from constants import WORDLE_SORT_KEY
 
-popular_words = open("utils/dict-popular.txt").read().splitlines()
-all_words = set(word.strip() for word in open("utils/dict-sowpods.txt"))
+popular_words = open("cogs/games/dict-popular.txt").read().splitlines()
+random.Random(WORDLE_SORT_KEY).shuffle(popular_words)
+all_words = set(word.strip() for word in open("cogs/games/dict-sowpods.txt"))
 
 EMOJI_CODES = {
     "green": {
@@ -101,15 +104,12 @@ def generate_colored_word(guess: str, answer: str) -> str:
     """
     Builds a string of emoji codes where each letter is
     colored based on the key:
-
     - Same letter, same place: Green
     - Same letter, different place: Yellow
     - Different letter: Gray
-
     Args:
         word (str): The word to be colored
         answer (str): The answer to the word
-
     Returns:
         str: A string of emoji codes
     """
@@ -133,21 +133,18 @@ def generate_colored_word(guess: str, answer: str) -> str:
 def generate_blanks() -> str:
     """
     Generate a string of 5 blank white square emoji characters
-
     Returns:
         str: A string of white square emojis
     """
-    return "\N{WHITE MEDIUM SQUARE}" * 5
+    return "◻️" * 5
 
 
 def generate_puzzle_embed(user: discord.User, puzzle_id: int) -> discord.Embed:
     """
     Generate an embed for a new puzzle given the puzzle id and user
-
     Args:
         user (discord.User): The user who submitted the puzzle
         puzzle_id (int): The puzzle ID
-
     Returns:
         discord.Embed: The embed to be sent
     """
@@ -166,12 +163,10 @@ def generate_puzzle_embed(user: discord.User, puzzle_id: int) -> discord.Embed:
 def update_embed(embed: discord.Embed, guess: str) -> discord.Embed:
     """
     Updates the embed with the new guesses
-
     Args:
         embed (discord.Embed): The embed to be updated
         puzzle_id (int): The puzzle ID
         guess (str): The guess made by the user
-
     Returns:
         discord.Embed: The updated embed
     """
@@ -207,10 +202,8 @@ def update_embed(embed: discord.Embed, guess: str) -> discord.Embed:
 def is_valid_word(word: str) -> bool:
     """
     Validates a word
-
     Args:
         word (str): The word to validate
-
     Returns:
         bool: Whether the word is valid
     """
@@ -220,7 +213,6 @@ def is_valid_word(word: str) -> bool:
 def random_puzzle_id() -> int:
     """
     Generates a random puzzle ID
-
     Returns:
         int: A random puzzle ID
     """
@@ -230,7 +222,6 @@ def random_puzzle_id() -> int:
 def daily_puzzle_id() -> int:
     """
     Calculates the puzzle ID for the daily puzzle
-
     Returns:
         int: The puzzle ID for the daily puzzle
     """
@@ -243,10 +234,8 @@ def daily_puzzle_id() -> int:
 def is_game_over(embed: discord.Embed) -> bool:
     """
     Checks if the game is over in the embed
-
     Args:
         embed (discord.Embed): The embed to check
-
     Returns:
         bool: Whether the game is over
     """
@@ -256,7 +245,6 @@ def is_game_over(embed: discord.Embed) -> bool:
 def generate_info_embed(prefix) -> discord.Embed:
     """
     Generates an embed with information about the bot
-
     Returns:
         discord.Embed: The embed to be sent
     """
@@ -265,7 +253,7 @@ def generate_info_embed(prefix) -> discord.Embed:
     embed = discord.Embed(
         title="Guess the Wordle in 6 tries",
         description=
-            "Each guess must be a valid 5-letter word.\n"
+            "Each guess must be a valid 5 letter word by replying to the bot's message.\n"
             "The colours of the tiles change to show how close the guess is to the word.\n",
         color=0X45c33a
     )
@@ -283,43 +271,28 @@ def generate_info_embed(prefix) -> discord.Embed:
         inline=False,
         name=f"**You can start a game with**",
         value=
+            f":key: `{prefix}wordle <puzzle_id>` - Play a puzzle by it's ID\n"
             f":sunny: `{prefix}wordle daily` - Play the puzzle of the day\n"
             f":game_die: `{prefix}wordle random` - Play a random puzzle\n"
-            f":key: `{prefix}wordle <puzzle_id>` - Play a puzzle by it's ID\n\n"
     )
     return embed
 
-async def process_message_as_guess(bot: discord.Client, message: discord.Message) -> bool:
+async def process_message_as_guess(
+    bot: discord.Client, message: discord.Message,
+    parent, embed: discord.Embed
+) -> bool:
     """
     Check if a new message is a reply to a Wordle game.
     If so, validate the guess and update the bot's message.
-
     Args:
         bot (discord.Client): The bot
         message (discord.Message): The new message to process
-
     Returns:
         bool: True if the message was processed as a guess, False otherwise
     """
-    # get the message replied to
-    ref = message.reference
-    if not ref or not isinstance(ref.resolved, discord.Message):
-        return False
-    parent = ref.resolved
 
-    # if the parent message is not the bot's message, ignore it
-    if parent.author.id != bot.user.id:
+    if "Discord Wordle #" not in embed.title:
         return False
-
-    # if the parent message is not from a bot, ignore it
-    if message.author.bot:
-        return False
-
-    # check that the message has embeds
-    if not parent.embeds:
-        return False
-
-    embed = parent.embeds[0]
 
     guess = message.content.lower()
 
@@ -330,51 +303,33 @@ async def process_message_as_guess(bot: discord.Client, message: discord.Message
     ):
         reply = "Start a new game with /wordle"
         if embed.author:
-            reply = f"{WARN} This game was started by {embed.author.name}. " + reply
-        await message.reply(reply, delete_after=5)
-        try:
-            await message.delete(delay=5)
-        except Exception:
-            pass
+            reply = f"{WARN} This game was started by {embed.author.name}. {reply}"
+        await send_wordle_error(message, reply)
         return True
-
     # check that the game is not over
     if is_game_over(embed):
-        await message.reply(f"{ERR} The game is already over. Start a new game with /wordle", delete_after=5)
+        await send_wordle_error(message, "The game is already over. Start a new game with /wordle")
         return True
 
     # strip mentions from the guess
     guess = re.sub(r"<@!?\d+>", "", guess).strip()
 
     if len(guess) == 0:
-        await message.reply(
-            "{WARN} I am unable to see what you are trying to guess.\n"
+        await send_wordle_error(message,
+            "I am unable to see what you are trying to guess.\n"
             "Please try mentioning me in your reply before the word you want to guess.\n\n"
-            f"**For example:**\n{bot.user.mention} crate\n\n",
-            delete_after=10,
+            f"**For example:**\n{bot.user.mention} crate\n\n"            
         )
-        try:
-            await message.delete(delay=10)
-        except Exception:
-            pass
         return True
 
     # check that a single word is in the message
     if len(guess.split()) > 1:
-        await message.reply(f"{WARN} Please respond with a single 5-letter word.", delete_after=5)
-        try:
-            await message.delete(delay=5)
-        except Exception:
-            pass
+        await send_wordle_error(message, f"{guess} is not a 5-letter word")
         return True
 
     # check that the word is valid
     if not is_valid_word(guess):
-        await message.reply(f"{WARN} That is not a valid word", delete_after=5)
-        try:
-            await message.delete(delay=5)
-        except Exception:
-            pass
+        await send_wordle_error(message, f"{guess} is not a valid word")
         return True
 
     # update the embed
@@ -386,5 +341,12 @@ async def process_message_as_guess(bot: discord.Client, message: discord.Message
         await message.delete()
     except Exception:
         pass
-
     return True
+
+async def send_wordle_error(message, error):
+    """Send error reply and delete message"""
+    await message.reply(f"{WARN} {error}", delete_after=5)
+    try:
+        message.delete()
+    except:
+        pass

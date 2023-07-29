@@ -435,6 +435,7 @@ apace
 apage
 apaid
 apart
+apast
 apayd
 apays
 apeak
@@ -10850,6 +10851,7 @@ tewel
 tewit
 texas
 texes
+texta
 texts
 thack
 thagi
@@ -11334,6 +11336,7 @@ tweel
 tween
 tweer
 tweet
+twerk
 twerp
 twice
 twier

@@ -8,7 +8,7 @@ A bot for playing a clone of Wordle.
 
 ## Changes in this fork
 
-- This fork has been migrated to discord.py version 2.0.0.
+- This fork has been migrated to discord.py version 2.3.1.
 - The Wordle commands have been migrated to a cog
 - The Wordle commands have been migrated to hybrid commands
 - Jonah Lawrence's help cog has been added as a cog, with some small formatting changes
@@ -19,6 +19,9 @@ A bot for playing a clone of Wordle.
 - The dict-popular word list has had 13 U.S. American spellings with "-or" removed from the popular word list
 - The dict-popular word list has had 1 U.S. American spelling "fiber" removed from the popular word list
 - The dict-popular word list has had 1 colloquial U.S. American word "senor" removed from the popular word list
+- The dict-popular word list has had some other truly bizzare words removed from the
+  popular word list, including a duplicate
+- Added "texta" and "twerk" to the sowpods list.
 
 ## Setup
 
