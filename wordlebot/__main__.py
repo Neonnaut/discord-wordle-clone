@@ -31,11 +31,10 @@ class MyBot(commands.Bot):
         # Load all the cogs in the cogs folder
         for cog in sorted(os.listdir("./cogs")):
             if os.path.isdir(f"./cogs/{cog}") and not cog.startswith("__"):
-                if not cog == "zannouncement":
-                    try:
-                        await self.load_extension(f"cogs.{cog}._{cog}")
-                    except Exception as e:
-                        self.logger.error(str(e))
+                try:
+                    await self.load_extension(f"cogs.{cog}._{cog}")
+                except Exception as e:
+                    self.logger.error(str(e))
 
     async def on_ready(self): # Prints that the bot is running
         await self.change_presence(activity=Activity(type=ActivityType.listening,
