@@ -8,7 +8,7 @@ from discord.ext import commands
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
-from constants import DISCORD_CLIENT, PREFIX, TESTING, ERR, WARN, INFO
+from constants import DISCORD_CLIENT, PREFIX, TESTING, ERR, WARN
 
 
 def main():
@@ -21,15 +21,13 @@ def main():
 class MyBot(commands.Bot):
     async def setup_hook(self):
         self.session = aiohttp.ClientSession() # For requests
-        # Create a custom logger
-        logger = logging.getLogger()
+        logger = logging.getLogger() # Create a custom logger
         logger.setLevel(logging.INFO)
         ch = logging.StreamHandler()
         ch.setFormatter(LoggerFormatter())
         logger.addHandler(ch)
         self.logger = logger
-        # Load all the cogs in the cogs folder
-        for cog in sorted(os.listdir("./cogs")):
+        for cog in sorted(os.listdir("./cogs")): # Load cogs from cogs folder
             if os.path.isdir(f"./cogs/{cog}") and not cog.startswith("__"):
                 try:
                     await self.load_extension(f"cogs.{cog}._{cog}")
@@ -47,7 +45,7 @@ class MyBot(commands.Bot):
         myMessage = str(myMessage)
         await ctx.reply(f"{ERR} {myMessage[:1].upper()}"\
             f"{myMessage[1:]}{''if str(myMessage)[-1]in['.','!','?']else'.'}",
-            mention_author=False,delete_after=8)
+            mention_author=False, delete_after=8)
         try:
             await ctx.message.delete(delay=8)
         except Exception:
@@ -59,7 +57,7 @@ class MyBot(commands.Bot):
         myMessage = str(myMessage)
         await ctx.reply(f"{WARN} {myMessage[:1].upper()}"\
             f"{myMessage[1:]}{''if str(myMessage)[-1]in['.','!','?']else'.'}",
-            mention_author=False,delete_after=6)
+            mention_author=False, delete_after=6)
         try:
             await ctx.message.delete(delay=6)
         except Exception:
