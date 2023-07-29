@@ -1513,6 +1513,7 @@ mates
 matey
 mayan
 maybe
+mayor
 meals
 mealy
 means
