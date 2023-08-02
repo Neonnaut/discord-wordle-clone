@@ -99,7 +99,6 @@ EMOJI_CODES = {
     },
 }
 
-
 def generate_colored_word(guess: str, answer: str) -> str:
     """
     Builds a string of emoji codes where each letter is
@@ -277,6 +276,14 @@ def generate_info_embed(prefix) -> discord.Embed:
     )
     return embed
 
+async def send_wordle_error(message, error):
+    """Send error reply and delete message"""
+    await message.reply(f"{WARN} {error}", delete_after=6)
+    try:
+        message.delete(delay=6)
+    except:
+        pass
+
 async def process_message_as_guess(
     bot: discord.Client, message: discord.Message,
     parent, embed: discord.Embed
@@ -342,11 +349,3 @@ async def process_message_as_guess(
     except Exception:
         pass
     return True
-
-async def send_wordle_error(message, error):
-    """Send error reply and delete message"""
-    await message.reply(f"{WARN} {error}", delete_after=5)
-    try:
-        message.delete()
-    except:
-        pass
